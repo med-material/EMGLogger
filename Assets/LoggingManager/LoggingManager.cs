@@ -17,7 +17,7 @@ public enum SaveStatus
 
 public class SaveStateInfo
 {
-	public SaveStatus status = SaveStatus.ReadyToSave;
+    public SaveStatus status = SaveStatus.ReadyToSave;
     public int numberOfSavedFiles;
     public int totalNumberOfFilesToSave;
 
@@ -84,8 +84,8 @@ public class LoggingManager : MonoBehaviour
     private Dictionary<string, Dictionary<TargetType, bool>> originsSavedPerLog;
 
     [Serializable]
-	public class OnSaveInfoChanged : UnityEvent<SaveStateInfo> {}
-	public OnSaveInfoChanged onSaveInfoChanged;
+    public class OnSaveInfoChanged : UnityEvent<SaveStateInfo> { }
+    public OnSaveInfoChanged onSaveInfoChanged;
 
     public SaveStateInfo saveStateInfo = new SaveStateInfo();
 
@@ -149,10 +149,9 @@ public class LoggingManager : MonoBehaviour
             Debug.LogWarning(collectionLabel + " already exists");
             return;
         }
-        LogStore logStore = new LogStore(collectionLabel, email, sessionID, logStringOverTime, headers:headers);
+        LogStore logStore = new LogStore(collectionLabel, email, sessionID, logStringOverTime, headers: headers);
         logsList.Add(collectionLabel, logStore);
     }
-
 
     public void Log(string collectionLabel, Dictionary<string, object> logData)
     {
@@ -264,14 +263,14 @@ public class LoggingManager : MonoBehaviour
 
     public void SaveAllLogs(bool clear)
     {
-         List<string> labelList = new List<string>();
+        List<string> labelList = new List<string>();
 
-        foreach(KeyValuePair<string, LogStore> key in logsList)
+        foreach (KeyValuePair<string, LogStore> key in logsList)
         {
             labelList.Add(key.Key);
         }
 
-        for(int i = 0; i < labelList.Count; i++)
+        for (int i = 0; i < labelList.Count; i++)
         {
             SaveLog(labelList[i], clear);
         }
@@ -279,16 +278,16 @@ public class LoggingManager : MonoBehaviour
         labelList.Clear();
     }
 
-    public void SaveAllLogs(bool clear,TargetType targetType)
+    public void SaveAllLogs(bool clear, TargetType targetType)
     {
         List<string> labelList = new List<string>();
 
-        foreach(KeyValuePair<string, LogStore> key in logsList)
+        foreach (KeyValuePair<string, LogStore> key in logsList)
         {
             labelList.Add(key.Key);
         }
 
-        for(int i = 0; i < labelList.Count; i++)
+        for (int i = 0; i < labelList.Count; i++)
         {
             SaveLog(labelList[i], clear, targetType);
         }
@@ -308,12 +307,12 @@ public class LoggingManager : MonoBehaviour
             //while the game is running, the LogStores with LogType OneRowOverwrite need to stay at 0 in the RowCount property.
             //when we want to save, we need to call EndRow function to specify that the LogStore is full.
             //So, during the save, the RowCount of these LogStores will be equals to 1.
-            if(logsList[collectionLabel].LogType == LogType.OneRowOverwrite)
+            if (logsList[collectionLabel].LogType == LogType.OneRowOverwrite)
             {
                 logsList[collectionLabel].EndRow();
             }
             LogStore tmpLogStore = logsList[collectionLabel];
-            if(clear)
+            if (clear)
             {
                 logsList.Remove(collectionLabel);
             }
@@ -323,7 +322,7 @@ public class LoggingManager : MonoBehaviour
             //meta collection is a special collection that contains all informations about the session.
             //we need to have this collection in the logsList before that the game start.
             //if we remove Meta collection in the logsList, we create it again after its removal.
-            if(collectionLabel == "Meta")
+            if (collectionLabel == "Meta")
             {
                 AddMetaCollectionToList();
             }
@@ -336,7 +335,7 @@ public class LoggingManager : MonoBehaviour
 
     public void SaveLog(string collectionLabel, bool clear, TargetType targetType)
     {
-        if(logsList.ContainsKey(collectionLabel))
+        if (logsList.ContainsKey(collectionLabel))
         {
             saveStateInfo.status = SaveStatus.IsSaving;
             saveStateInfo.totalNumberOfFilesToSave++;
@@ -346,12 +345,12 @@ public class LoggingManager : MonoBehaviour
             //while the game is running, the LogStores with LogType OneRowOverwrite need to stay at 0 in the RowCount property.
             //when we want to save, we need to call EndRow function to specify that the LogStore is full.
             //So, during the save, the RowCount of these LogStores will be equals to 1.
-            if(logsList[collectionLabel].LogType == LogType.OneRowOverwrite)
+            if (logsList[collectionLabel].LogType == LogType.OneRowOverwrite)
             {
                 logsList[collectionLabel].EndRow();
             }
             LogStore tmpLogStore = logsList[collectionLabel];
-            if(clear)
+            if (clear)
             {
                 logsList.Remove(collectionLabel);
             }
@@ -360,7 +359,7 @@ public class LoggingManager : MonoBehaviour
             //meta collection is a special collection that contains all informations about the game.
             //we need to have this collection in the logsList before that the game start.
             //if we remove Meta collection in the logsList, we create it again after its removal.
-            if(collectionLabel == "Meta")
+            if (collectionLabel == "Meta")
             {
                 AddMetaCollectionToList();
             }
@@ -428,14 +427,14 @@ public class LoggingManager : MonoBehaviour
     {
         saveStateInfo.numberOfSavedFiles++;
 
-        if(saveStateInfo.numberOfSavedFiles == saveStateInfo.totalNumberOfFilesToSave)
+        if (saveStateInfo.numberOfSavedFiles == saveStateInfo.totalNumberOfFilesToSave)
         {
             saveStateInfo.status = SaveStatus.Saved;
 
             onSaveInfoChanged.Invoke((SaveStateInfo)saveStateInfo.Clone());
-               
+
             saveStateInfo.numberOfSavedFiles = 0;
-            saveStateInfo.totalNumberOfFilesToSave = 0;     
+            saveStateInfo.totalNumberOfFilesToSave = 0;
         }
         else
         {
