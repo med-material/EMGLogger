@@ -138,7 +138,7 @@ public class ThalmicHub : MonoBehaviour //, IThalmicHub
         }
         catch (System.Exception e)
         {
-            Debug.LogError("ThalmicHub failed to initialize:" + e.Message);
+            Debug.LogError("ThalmicHub failed to initialize. Ensure that myo.dll is not missing (root folder of the project).");
             return false;
         }
         return true;
