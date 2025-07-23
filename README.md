@@ -1,7 +1,10 @@
-# LoggingManager
+# EMGLoggingManager
 Provides a UnityPackage for logging data to CSV and to MySQL databases. For examples of using the LoggingManager, see the included [LoggingExample.cs](https://github.com/med-material/LoggingManager/blob/master/Assets/LoggingManager/LoggingExample.cs). 
 
+This repository is a special fork of LoggingManager that has added an example for recording Myo armband EMG data at 200hz.
+
 ### [Download The Unitypackage Here](https://github.com/med-material/LoggingManager/releases/latest)
+### And don't forget to copy myo.dll in the root folder
 
 ## How to Import Into Unity
  1. Download the [Unity Package](https://github.com/med-material/LoggingManager/releases/latest).
