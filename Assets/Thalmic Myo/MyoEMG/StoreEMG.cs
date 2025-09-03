@@ -40,7 +40,7 @@ public class StoreEMG : MonoBehaviour
         // The EMG Pod 08 is unreadable during the first loop iteration. i.e. In the first loop the emg[] size is 7, not 8
         if (emg == null || emg.Length != 8)
         {
-            Debug.LogWarning("EMG Data malformed: " + emg);
+            Debug.LogWarning("EMG Data malformed: [" + (emg == null ? "null" : string.Join(", ", emg)) + "]");
             return;
         }
 
@@ -59,7 +59,7 @@ public class StoreEMG : MonoBehaviour
         // The EMG Pod 08 is unreadable during the first loop iteration. i.e. In the first loop the emg[] size is 7, not 8
         if (emg == null || emg.Length != 8)
         {
-            Debug.LogWarning("EMG Data malformed: " + emg);
+            Debug.LogWarning("EMG Data malformed: [" + (emg == null ? "null" : string.Join(", ", emg)) + "]");
             return;
         }
 

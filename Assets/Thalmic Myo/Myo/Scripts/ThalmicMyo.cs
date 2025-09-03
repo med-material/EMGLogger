@@ -11,6 +11,8 @@ using StreamEmg = Thalmic.Myo.StreamEmg;
 
 public class ThalmicMyo : MonoBehaviour
 {
+    public Thalmic.Myo.Myo _myo;
+
     public bool armSynced;
     public bool unlocked;
     public Arm arm;
@@ -23,17 +25,14 @@ public class ThalmicMyo : MonoBehaviour
     [SerializeField]
     public Thalmic.Myo.Result streamEmg;
 
-    private int[] latestEmgData = new int[8];
     public Queue<int[]> emgBuffer = new Queue<int[]>();
     private object emgLock = new object();
 
     private bool isCollecting = false;
-    private int targetFrequency = 200; // Target EMG frequency
     private Coroutine emgCoroutine;
 
     [SerializeField]
     public static int[] emg;
-
 
     private Object _lock = new Object();
 
@@ -48,10 +47,6 @@ public class ThalmicMyo : MonoBehaviour
     private bool _myoUnlocked = false;
 
     public StreamEmg _myoStreamEmg = StreamEmg.Enabled;
-
-    public Thalmic.Myo.Myo _myo;
-
-
 
     public bool isPaired
     {
@@ -149,7 +144,7 @@ public class ThalmicMyo : MonoBehaviour
         }
     }
 
-    public int[] Update()
+    void Update()
     {
         lock (_lock)
         {
@@ -180,7 +175,6 @@ public class ThalmicMyo : MonoBehaviour
             pose = _myoPose;
             unlocked = _myoUnlocked;
         }
-        return emg;
     }
 
     void myo_OnArmSync(object sender, Thalmic.Myo.ArmSyncedEventArgs e)
@@ -227,8 +221,7 @@ public class ThalmicMyo : MonoBehaviour
         }
     }
 
-    // Emg - New code
-    public void myo_OnEmgData(object sender, Thalmic.Myo.EmgDataEventArgs e)
+    void myo_OnReceiveData(object sender, Thalmic.Myo.EmgDataEventArgs e)
     {
         lock (_lock)
         {
@@ -267,6 +260,7 @@ public class ThalmicMyo : MonoBehaviour
         {
             if (_myo != null)
             {
+                _myo.EmgData -= myo_OnReceiveData;
                 _myo.ArmSynced -= myo_OnArmSync;
                 _myo.ArmUnsynced -= myo_OnArmUnsync;
                 _myo.OrientationData -= myo_OnOrientationData;
@@ -279,6 +273,7 @@ public class ThalmicMyo : MonoBehaviour
             _myo = value;
             if (value != null)
             {
+                value.EmgData += myo_OnReceiveData;
                 value.ArmSynced += myo_OnArmSync;
                 value.ArmUnsynced += myo_OnArmUnsync;
                 value.OrientationData += myo_OnOrientationData;
